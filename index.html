@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0b0b0b">
+<meta name="description" content="Music Player Spotify Clone untuk HP">
+<title>Vinsz - Musik</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    background:#050505;
+    color:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+button{
+    border:0;
+    color:white;
+    background:none;
+    cursor:pointer;
+}
+
+.app{
+    max-width:600px;
+    min-height:100vh;
+    margin:auto;
+    background:
+        radial-gradient(circle at 50% -10%,#263526 0,#111 30%,#050505 65%);
+    padding-bottom:145px;
+}
+
+/* HEADER */
+
+.header{
+    padding:20px 18px 12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:900;
+    letter-spacing:-1px;
+}
+
+.logo span{
+    color:#1ed760;
+}
+
+.profile{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#1ed760,#087f3d);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+/* SEARCH */
+
+.search{
+    margin:5px 18px 20px;
+    height:48px;
+    background:#242424;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    padding:0 15px;
+    gap:10px;
+}
+
+.search span{
+    font-size:20px;
+}
+
+.search input{
+    width:100%;
+    background:none;
+    border:0;
+    outline:none;
+    color:white;
+    font-size:15px;
+}
+
+.search input::placeholder{
+    color:#aaa;
+}
+
+/* CONTENT */
+
+.content{
+    padding:0 18px;
+}
+
+.section-title{
+    font-size:22px;
+    font-weight:800;
+    margin:22px 0 14px;
+}
+
+/* QUICK PLAYLIST */
+
+.quick{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.quick-item{
+    background:#242424;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+    height:64px;
+    transition:.2s;
+}
+
+.quick-item:active{
+    transform:scale(.97);
+}
+
+.quick-cover{
+    width:64px;
+    height:64px;
+    object-fit:cover;
+}
+
+.quick-title{
+    padding:10px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+/* CATEGORIES */
+
+.categories{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    scrollbar-width:none;
+}
+
+.categories::-webkit-scrollbar{
+    display:none;
+}
+
+.category{
+    white-space:nowrap;
+    background:#222;
+    border:1px solid #333;
+    padding:9px 15px;
+    border-radius:20px;
+    font-size:13px;
+}
+
+.category.active{
+    background:#1ed760;
+    color:#000;
+    border-color:#1ed760;
+}
+
+/* SONG LIST */
+
+.song-list{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.song{
+    display:flex;
+    align-items:center;
+    padding:8px;
+    border-radius:8px;
+    transition:.2s;
+}
+
+.song.active{
+    background:#1d2b22;
+}
+
+.song:active{
+    background:#292929;
+}
+
+.cover{
+    width:58px;
+    height:58px;
+    object-fit:cover;
+    border-radius:5px;
+    flex-shrink:0;
+}
+
+.song-info{
+    padding-left:12px;
+    min-width:0;
+    flex:1;
+}
+
+.song-name{
+    font-size:15px;
+    font-weight:bold;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.artist{
+    color:#aaa;
+    font-size:12px;
+    margin-top:5px;
+}
+
+.song-fav{
+    font-size:20px;
+    padding:8px;
+}
+
+/* EMPTY */
+
+.empty{
+    display:none;
+    text-align:center;
+    color:#888;
+    padding:30px;
+}
+
+/* PLAYER */
+
+.player{
+    position:fixed;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:600px;
+    z-index:100;
+    background:rgba(15,15,15,.97);
+    backdrop-filter:blur(20px);
+    border-top:1px solid #292929;
+}
+
+/* NOW PLAYING */
+
+.now{
+    display:flex;
+    align-items:center;
+    padding:9px 12px 5px;
+}
+
+.now-cover{
+    width:52px;
+    height:52px;
+    border-radius:5px;
+    object-fit:cover;
+}
+
+.now-info{
+    flex:1;
+    min-width:0;
+    padding-left:10px;
+}
+
+.now-title{
+    font-size:13px;
+    font-weight:bold;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.now-artist{
+    color:#aaa;
+    font-size:11px;
+    margin-top:4px;
+}
+
+.now-actions{
+    display:flex;
+    gap:4px;
+}
+
+.now-actions button{
+    font-size:20px;
+    padding:7px;
+}
+
+/* PROGRESS */
+
+.progress-area{
+    padding:0 14px;
+}
+
+.progress{
+    width:100%;
+    height:4px;
+    appearance:none;
+    background:#555;
+    border-radius:10px;
+    outline:none;
+}
+
+.progress::-webkit-slider-thumb{
+    appearance:none;
+    width:11px;
+    height:11px;
+    border-radius:50%;
+    background:#1ed760;
+}
+
+.time{
+    display:flex;
+    justify-content:space-between;
+    color:#888;
+    font-size:9px;
+    margin-top:3px;
+}
+
+/* CONTROLS */
+
+.controls{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:25px;
+    padding:5px 0 8px;
+}
+
+.controls button{
+    font-size:22px;
+}
+
+.play{
+    width:47px;
+    height:47px;
+    border-radius:50%;
+    background:white;
+    color:#000 !important;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px !important;
+}
+
+.small-control{
+    color:#aaa;
+}
+
+.small-control.active{
+    color:#1ed760;
+}
+
+/* BOTTOM NAV */
+
+.nav{
+    position:fixed;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:600px;
+    height:67px;
+    background:#080808;
+    border-top:1px solid #222;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    z-index:99;
+    padding-bottom:2px;
+}
+
+.nav-item{
+    color:#888;
+    text-align:center;
+    font-size:10px;
+}
+
+.nav-item div{
+    font-size:21px;
+    margin-bottom:3px;
+}
+
+.nav-item.active{
+    color:white;
+}
+
+.nav-item.active div{
+    color:#1ed760;
+}
+
+/* HIDE NAV WHEN PLAYER */
+
+@media(max-width:600px){
+    .player{
+        bottom:66px;
+    }
+
+    .app{
+        padding-bottom:215px;
+    }
+}
+
+/* DESKTOP */
+
+@media(min-width:601px){
+    body{
+        background:#000;
+    }
+
+    .app{
+        box-shadow:0 0 60px #000;
+    }
+}
+
+/* MODAL */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.75);
+    z-index:300;
+    display:none;
+    align-items:flex-end;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:600px;
+    margin:auto;
+    background:#191919;
+    border-radius:20px 20px 0 0;
+    padding:20px;
+}
+
+.modal-title{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.option{
+    padding:16px 5px;
+    border-bottom:1px solid #333;
+}
+
+/* NOTIFICATION */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:220px;
+    transform:translateX(-50%) translateY(20px);
+    background:#222;
+    padding:12px 18px;
+    border-radius:25px;
+    font-size:13px;
+    opacity:0;
+    pointer-events:none;
+    transition:.3s;
+    z-index:500;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+/* ROTATING COVER */
+
+.rotating{
+    animation:rotate 8s linear infinite;
+}
+
+@keyframes rotate{
+    from{transform:rotate(0deg)}
+    to{transform:rotate(360deg)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <header class="header">
+        <div class="logo">Vinszz<span>●</span></div>
+        <div class="profile">U</div>
+    </header>
+
+    <div class="search">
+        <span>🔍</span>
+        <input
+            id="searchInput"
+            type="text"
+            placeholder="Apa yang ingin kamu dengarkan?"
+            autocomplete="off"
+        >
+    </div>
+
+    <main class="content">
+
+        <h2 class="section-title">Selamat datang 👋</h2>
+
+        <div class="quick">
+
+            <div class="quick-item" onclick="playSong(0)">
+                <img class="quick-cover" src="https://picsum.photos/100?random=11">
+                <div class="quick-title">Favorit Kamu</div>
+            </div>
+
+            <div class="quick-item" onclick="playSong(1)">
+                <img class="quick-cover" src="https://picsum.photos/100?random=12">
+                <div class="quick-title">Playlist Chill</div>
+            </div>
+
+            <div class="quick-item" onclick="playSong(2)">
+                <img class="quick-cover" src="https://picsum.photos/100?random=13">
+                <div class="quick-title">Musik Santai</div>
+            </div>
+
+            <div class="quick-item" onclick="playSong(3)">
+                <img class="quick-cover" src="https://picsum.photos/100?random=14">
+                <div class="quick-title">Workout</div>
+            </div>
+
+        </div>
+
+        <h2 class="section-title">Genre</h2>
+
+        <div class="categories">
+            <button class="category active">Semua</button>
+            <button class="category">Pop</button>
+            <button class="category">Hip Hop</button>
+            <button class="category">Rock</button>
+            <button class="category">Chill</button>
+            <button class="category">EDM</button>
+        </div>
+
+        <h2 class="section-title">Lagu Populer</h2>
+
+        <div id="songList" class="song-list"></div>
+
+        <div id="empty" class="empty">
+            😔<br><br>
+            Lagu tidak ditemukan
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- PLAYER -->
+
+<div class="player">
+
+    <div class="now">
+
+        <img id="nowCover"
+             class="now-cover"
+             src="https://picsum.photos/100?random=11">
+
+        <div class="now-info">
+            <div id="nowTitle" class="now-title">
+                Pilih lagu
+            </div>
+
+            <div id="nowArtist" class="now-artist">
+                Belum ada lagu diputar
+            </div>
+        </div>
+
+        <div class="now-actions">
+            <button onclick="toggleFavorite()">♡</button>
+            <button onclick="showQueue()">☰</button>
+        </div>
+
+    </div>
+
+    <div class="progress-area">
+
+        <input
+            id="progress"
+            class="progress"
+            type="range"
+            min="0"
+            max="100"
+            value="0"
+        >
+
+        <div class="time">
+            <span id="currentTime">0:00</span>
+            <span id="duration">0:00</span>
+        </div>
+
+    </div>
+
+    <div class="controls">
+
+        <button
+            id="shuffleBtn"
+            class="small-control"
+            onclick="toggleShuffle()">
+            🔀
+        </button>
+
+        <button onclick="previousSong()">⏮</button>
+
+        <button
+            id="playBtn"
+            class="play"
+            onclick="togglePlay()">
+            ▶
+        </button>
+
+        <button onclick="nextSong()">⏭</button>
+
+        <button
+            id="repeatBtn"
+            class="small-control"
+            onclick="toggleRepeat()">
+            🔁
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- NAVIGATION -->
+
+<nav class="nav">
+
+    <div class="nav-item active">
+        <div>⌂</div>
+        Home
+    </div>
+
+    <div class="nav-item">
+        <div>🔍</div>
+        Search
+    </div>
+
+    <div class="nav-item">
+        <div>📚</div>
+        Library
+    </div>
+
+</nav>
+
+
+<!-- QUEUE MODAL -->
+
+<div id="queueModal" class="modal" onclick="closeQueue(event)">
+
+    <div class="modal-box">
+
+        <div class="modal-title">
+            Daftar Putar
+        </div>
+
+        <div id="queueContent"></div>
+
+    </div>
+
+</div>
+
+
+<div id="toast" class="toast">
+    Ditambahkan ke favorit ❤️
+</div>
+
+
+<audio id="audio"></audio>
+
+
+<script>
+
+/* ==============================
+   DATABASE LAGU
+================================ */
+
+const songs = [
+
+    {
+        title:"Sesi Potret",
+        artist:"Ari Lesmana",
+        cover:"https://picsum.photos/500?random=21",
+        file:"music/lagu1.mp3"
+    },
+
+    {
+        title:"Teh hijau",
+        artist:"Tulus",
+        cover:"https://picsum.photos/500?random=22",
+        file:"music/lagu2.mp3"
+    },
+
+    {
+        title:"menerima luka",
+        artist:"Natasya Sabella",
+        cover:"https://picsum.photos/500?random=23",
+        file:"music/lagu3.mp3"
+    },
+
+    {
+        title:"Cinta ku bukan di atas kertas",
+        artist:"christy Lee",
+        cover:"https://picsum.photos/500?random=24",
+        file:"music/lagu4.mp3"
+    },
+
+    {
+        title:"Usik",
+        artist:"Feby Putri",
+        cover:"https://picsum.photos/500?random=25",
+        file:"music/lagu5.mp3"
+    },
+
+    {
+        title:"iqro'",
+        artist:"Raim Laode",
+        cover:"https://picsum.photos/500?random=26",
+        file:"music/lagu6.mp3"
+    }
+
+];
+
+
+/* ==============================
+   VARIABLES
+================================ */
+
+const audio = document.getElementById("audio");
+
+const songList = document.getElementById("songList");
+
+const playBtn = document.getElementById("playBtn");
+
+const progress = document.getElementById("progress");
+
+const nowCover = document.getElementById("nowCover");
+
+const nowTitle = document.getElementById("nowTitle");
+
+const nowArtist = document.getElementById("nowArtist");
+
+const currentTime = document.getElementById("currentTime");
+
+const duration = document.getElementById("duration");
+
+let currentIndex = 0;
+
+let isPlaying = false;
+
+let shuffle = false;
+
+let repeat = false;
+
+let favorites = [];
+
+
+/* ==============================
+   RENDER SONG
+================================ */
+
+function renderSongs(list = songs){
+
+    songList.innerHTML = "";
+
+    if(list.length === 0){
+
+        document.getElementById("empty").style.display = "block";
+
+        return;
+
+    }
+
+    document.getElementById("empty").style.display = "none";
+
+    list.forEach((song,index)=>{
+
+        const originalIndex = songs.indexOf(song);
+
+        const div = document.createElement("div");
+
+        div.className =
+            "song " +
+            (originalIndex === currentIndex ? "active" : "");
+
+        div.innerHTML = `
+
+            <img
+                class="cover"
+                src="${song.cover}"
+                alt="${song.title}"
+            >
+
+            <div
+                class="song-info"
+                onclick="playSong(${originalIndex})"
+            >
+
+                <div class="song-name">
+                    ${song.title}
+                </div>
+
+                <div class="artist">
+                    ${song.artist}
+                </div>
+
+            </div>
+
+            <button
+                class="song-fav"
+                onclick="favoriteFromList(${originalIndex})"
+            >
+                ${favorites.includes(originalIndex) ? "♥" : "♡"}
+            </button>
+
+        `;
+
+        songList.appendChild(div);
+
+    });
+
+}
+
+
+/* ==============================
+   PLAY SONG
+================================ */
+
+function playSong(index){
+
+    currentIndex = index;
+
+    const song = songs[currentIndex];
+
+    audio.src = song.file;
+
+    nowCover.src = song.cover;
+
+    nowTitle.textContent = song.title;
+
+    nowArtist.textContent = song.artist;
+
+    audio.play()
+        .then(()=>{
+
+            isPlaying = true;
+
+            playBtn.textContent = "❚❚";
+
+            nowCover.classList.add("rotating");
+
+        })
+        .catch(()=>{
+
+            showToast(
+                "File MP3 belum ditemukan. Masukkan file ke folder music."
+            );
+
+        });
+
+    renderSongs();
+
+}
+
+
+/* ==============================
+   PLAY / PAUSE
+================================ */
+
+function togglePlay(){
+
+    if(!audio.src){
+
+        playSong(currentIndex);
+
+        return;
+
+    }
+
+    if(audio.paused){
+
+        audio.play();
+
+        isPlaying = true;
+
+        playBtn.textContent = "❚❚";
+
+        nowCover.classList.add("rotating");
+
+    }else{
+
+        audio.pause();
+
+        isPlaying = false;
+
+        playBtn.textContent = "▶";
+
+        nowCover.classList.remove("rotating");
+
+    }
+
+}
+
+
+/* ==============================
+   NEXT
+================================ */
+
+function nextSong(){
+
+    if(shuffle){
+
+        let random;
+
+        do{
+
+            random =
+                Math.floor(Math.random()*songs.length);
+
+        }while(random === currentIndex && songs.length > 1);
+
+        currentIndex = random;
+
+    }else{
+
+        currentIndex++;
+
+        if(currentIndex >= songs.length){
+
+            currentIndex = 0;
+
+        }
+
+    }
+
+    playSong(currentIndex);
+
+}
+
+
+/* ==============================
+   PREVIOUS
+================================ */
+
+function previousSong(){
+
+    if(audio.currentTime > 5){
+
+        audio.currentTime = 0;
+
+        return;
+
+    }
+
+    currentIndex--;
+
+    if(currentIndex < 0){
+
+        currentIndex = songs.length-1;
+
+    }
+
+    playSong(currentIndex);
+
+}
+
+
+/* ==============================
+   AUDIO EVENTS
+================================ */
+
+audio.addEventListener("timeupdate",()=>{
+
+    if(audio.duration){
+
+        progress.value =
+            (audio.currentTime / audio.duration) * 100;
+
+        currentTime.textContent =
+            formatTime(audio.currentTime);
+
+    }
+
+});
+
+
+audio.addEventListener("loadedmetadata",()=>{
+
+    duration.textContent =
+        formatTime(audio.duration);
+
+});
+
+
+audio.addEventListener("ended",()=>{
+
+    if(repeat){
+
+        audio.currentTime = 0;
+
+        audio.play();
+
+    }else{
+
+        nextSong();
+
+    }
+
+});
+
+
+/* ==============================
+   PROGRESS
+================================ */
+
+progress.addEventListener("input",()=>{
+
+    if(audio.duration){
+
+        audio.currentTime =
+            (progress.value / 100) *
+            audio.duration;
+
+    }
+
+});
+
+
+/* ==============================
+   FORMAT TIME
+================================ */
+
+function formatTime(seconds){
+
+    if(!seconds || isNaN(seconds))
+        return "0:00";
+
+    const min =
+        Math.floor(seconds / 60);
+
+    const sec =
+        Math.floor(seconds % 60)
+        .toString()
+        .padStart(2,"0");
+
+    return `${min}:${sec}`;
+
+}
+
+
+/* ==============================
+   SHUFFLE
+================================ */
+
+function toggleShuffle(){
+
+    shuffle = !shuffle;
+
+    document
+        .getElementById("shuffleBtn")
+        .classList.toggle("active",shuffle);
+
+    showToast(
+        shuffle
+        ? "Shuffle aktif 🔀"
+        : "Shuffle mati"
+    );
+
+}
+
+
+/* ==============================
+   REPEAT
+================================ */
+
+function toggleRepeat(){
+
+    repeat = !repeat;
+
+    document
+        .getElementById("repeatBtn")
+        .classList.toggle("active",repeat);
+
+    showToast(
+        repeat
+        ? "Repeat aktif 🔁"
+        : "Repeat mati"
+    );
+
+}
+
+
+/* ==============================
+   FAVORITE
+================================ */
+
+function favoriteFromList(index){
+
+    if(favorites.includes(index)){
+
+        favorites =
+            favorites.filter(i=>i!==index);
+
+        showToast("Dihapus dari favorit");
+
+    }else{
+
+        favorites.push(index);
+
+        showToast("Ditambahkan ke favorit ❤️");
+
+    }
+
+    renderSongs();
+
+}
+
+
+function toggleFavorite(){
+
+    favoriteFromList(currentIndex);
+
+}
+
+
+/* ==============================
+   SEARCH
+================================ */
+
+document
+    .getElementById("searchInput")
+    .addEventListener("input",function(){
+
+        const keyword =
+            this.value.toLowerCase().trim();
+
+        const result =
+            songs.filter(song=>
+
+                song.title
+                    .toLowerCase()
+                    .includes(keyword)
+
+                ||
+
+                song.artist
+                    .toLowerCase()
+                    .includes(keyword)
+
+            );
+
+        renderSongs(result);
+
+    });
+
+
+/* ==============================
+   CATEGORY
+================================ */
+
+document
+    .querySelectorAll(".category")
+    .forEach(button=>{
+
+        button.addEventListener("click",()=>{
+
+            document
+                .querySelectorAll(".category")
+                .forEach(b=>
+                    b.classList.remove("active")
+                );
+
+            button.classList.add("active");
+
+            showToast(
+                "Genre: " + button.textContent
+            );
+
+        });
+
+    });
+
+
+/* ==============================
+   QUEUE
+================================ */
+
+function showQueue(){
+
+    const modal =
+        document.getElementById("queueModal");
+
+    const content =
+        document.getElementById("queueContent");
+
+    content.innerHTML = "";
+
+    songs.forEach((song,index)=>{
+
+        const item =
+            document.createElement("div");
+
+        item.className = "option";
+
+        item.innerHTML = `
+            <b>${song.title}</b><br>
+            <small style="color:#999">
+                ${song.artist}
+            </small>
+        `;
+
+        item.onclick = ()=>{
+
+            playSong(index);
+
+            modal.classList.remove("show");
+
+        };
+
+        content.appendChild(item);
+
+    });
+
+    modal.classList.add("show");
+
+}
+
+
+function closeQueue(event){
+
+    if(event.target.id === "queueModal"){
+
+        event.target.classList.remove("show");
+
+    }
+
+}
+
+
+/* ==============================
+   TOAST
+================================ */
+
+let toastTimer;
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(()=>{
+
+            toast.classList.remove("show");
+
+        },2000);
+
+}
+
+
+/* ==============================
+   NAVIGATION
+================================ */
+
+document
+    .querySelectorAll(".nav-item")
+    .forEach(item=>{
+
+        item.addEventListener("click",()=>{
+
+            document
+                .querySelectorAll(".nav-item")
+                .forEach(i=>
+                    i.classList.remove("active")
+                );
+
+            item.classList.add("active");
+
+        });
+
+    });
+
+
+/* ==============================
+   INITIAL
+================================ */
+
+renderSongs();
+
+</script>
+
+</body>
+</html>
